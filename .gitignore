@@ -1,0 +1,6 @@
+*.o
+*.bin
+*~
+Gemfile.lock
+.vscode
+.bundle
