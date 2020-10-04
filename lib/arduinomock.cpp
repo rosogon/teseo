@@ -7,7 +7,6 @@
 
 #ifndef __AVR__
 
-#define NC 0
 
 #define PIN_A0   (14)
 #define PIN_A1   (15)
@@ -42,9 +41,37 @@ MePort::MePort(uint8_t port) {
   _port = port;
 }
 
+uint8_t MePort::pin1() {
+  return s1;
+}
+
+uint8_t MePort::pin2() {
+  return s2;
+}
+
+MeCompass::MeCompass(uint8_t port) : MePort(port) {
+  ;
+}
+
+double MeCompass::getAngle() {
+  return 0;
+}
+
+
+MeDCMotor::MeDCMotor(uint8_t port) : MePort(port) {
+  ;
+}
+
+void MeDCMotor::run(int16_t speed) {
+  speed = speed > 255 ? 255 : speed;
+  speed = speed < -255 ? -255 : speed;
+
+  last_speed = speed;
+}
 
 unsigned long pulseIn(int pin, int value, unsigned long timeout) {
 
   delay(timeout);
 }
+
 #endif

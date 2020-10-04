@@ -1,7 +1,7 @@
 #ifndef driver_h
 #define driver_h
 
-#include <MeDCMotor.h>
+#include <hardware.h>
 #include "sensors.h"
 
 typedef enum : char {

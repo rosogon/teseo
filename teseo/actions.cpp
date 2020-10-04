@@ -158,7 +158,10 @@ void FollowWall::start() {
       }
     }
   }
-  
+}
+
+void FollowWall::loop() {
+  /* TODO */
 }
 
 int FollowAngle::calcDrift(double curAngle, int targetAngle) {

@@ -37,6 +37,7 @@ class UltrasonicSet {
   
 public:
   UltrasonicSet(UltrasonicSensor* set[], size_t n, bool parallel);
+  ~UltrasonicSet();
   int *distanceCm();
   size_t size();
   

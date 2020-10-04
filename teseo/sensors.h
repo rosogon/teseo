@@ -2,9 +2,7 @@
 #define sensors_h
 
 #include <ultrasonic.h>
-#include <Arduino.h>
-#include <MePort.h>
-#include <MeCompass.h>
+#include <hardware.h>
 #include <times.h>
 
 #define COMPASS 1

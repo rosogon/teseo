@@ -116,6 +116,11 @@ UltrasonicSet::UltrasonicSet(UltrasonicSensor* set[], size_t n, bool parallel) {
   _distance = (int *) calloc(n, sizeof(int));
 }
 
+UltrasonicSet::~UltrasonicSet() {
+  free(_waitTrigger);
+  free(_distance);
+}
+
 size_t UltrasonicSet::size() {
   return _n;
 }
