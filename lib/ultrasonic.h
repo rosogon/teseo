@@ -2,11 +2,7 @@
 #define ultrasonic_h
 
 #include <Arduino.h>
-#ifdef __AVR__
-#include <MePort.h>
-#else
-#include "arduinomock.h"
-#endif
+#include <hardware.h>
 
 static const int MAX_CM = 400;
 

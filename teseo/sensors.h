@@ -1,8 +1,8 @@
 #ifndef sensors_h
 #define sensors_h
 
-#include <ultrasonic.h>
 #include <hardware.h>
+#include <ultrasonic.h>
 #include <times.h>
 
 #define COMPASS 1

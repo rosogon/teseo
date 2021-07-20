@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#ifdef __AVR__
+#ifndef ARDUINO_CI
 
 #include <MePort.h>
 #include <MeCompass.h>

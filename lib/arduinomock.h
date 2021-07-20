@@ -6,7 +6,7 @@
 #ifndef arduinomock_h
 #define arduinomock_h
 
-#ifndef __AVR__
+#ifdef ARDUINO_CI
 
 
 /* Makeblock defines */
@@ -77,8 +77,6 @@ private:
 };
 
 extern MePort_Sig mePort[17];
-
-unsigned long pulseIn(int pin, int value, unsigned long timeout = 1 * 1000 * 1000);
 
 #endif
 

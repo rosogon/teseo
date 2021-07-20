@@ -5,7 +5,7 @@
 
 #include "arduinomock.h"
 
-#ifndef __AVR__
+#ifdef ARDUINO_CI
 
 
 #define PIN_A0   (14)
@@ -67,11 +67,6 @@ void MeDCMotor::run(int16_t speed) {
   speed = speed < -255 ? -255 : speed;
 
   last_speed = speed;
-}
-
-unsigned long pulseIn(int pin, int value, unsigned long timeout) {
-
-  delay(timeout);
 }
 
 #endif
