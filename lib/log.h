@@ -13,4 +13,12 @@ void tlog(const char *prefix, const char *format, ...);
  */
 void setConsole(Print &newConsole);
 
+class StderrPrint: public Print {
+
+  size_t write(uint8_t c) {
+    fprintf(stderr, "%c", c);
+    return 1;
+  }
+};
+
 #endif

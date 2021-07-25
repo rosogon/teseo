@@ -6,6 +6,12 @@
 
 #define DEFAULT_VELOCITY 150
 
+/*
+ * Go is a basic go forward Action at a given speed
+ * 
+ * On start(), moves forward (or backward)
+ * On stop(), stops.
+ */
 class Go : public Action {
   int _vel;
   Driver *_driver;
@@ -22,6 +28,12 @@ public:
 
 };
 
+/*
+ * Move allows to turn, spin or go (see Driver::move2)
+ * 
+ * On start(), starts movement
+ * On stop(), stops.
+ */
 class Move : public Action {
   int _vel;
   action_T _action;
@@ -40,6 +52,12 @@ public:
   bool isStarted();
 };
 
+/*
+ * Measure wall is a Loop that performs one ultrasonic measure.
+ * 
+ * On start(), measures.
+ * On loop(), measures.
+ */
 class MeasureWall : public Loop {
   Sensors *_sensors;
 
@@ -52,6 +70,9 @@ public:
   void loop();
 };
 
+/*
+ * Elapsed is a Condition that evaluates to true when a given amount of time has elapsed.
+ */
 class Elapsed : public Condition {
   Times _t;
   unsigned _duration;
@@ -62,6 +83,12 @@ public:
   bool eval();
 };
 
+/*
+ * NoWall is a Condition that:
+ * 
+ * on start(): checks if there is a near wall
+ * on eval(): returns true if the wall is not detected
+ */
 class NoWall : public Condition {
   Sensors *_sensors;
   side_T _sideToFollow;
@@ -79,6 +106,9 @@ class NoWall : public Condition {
 #define MAX_DRIFT 15
 #define MIN_DRIFT 5
 
+/*
+ * FollowAngle is a Loop that tries to maintain the compass angle obtained on start()
+ */
 class FollowAngle: public Loop {
   Driver *_driver;
   Sensors *_sensors;
@@ -97,6 +127,10 @@ public:
   void loop();
 };
 
+/*
+ * FollowWall is a Loop that maintains the distance with a given wall 
+ * (the closest wall if sideToFollow is NONE)
+ */
 class FollowWall : public Loop {
   Driver *_driver;
   Sensors *_sensors;
@@ -111,6 +145,10 @@ public:
   void start();
   void loop();
 };
+
+/*
+ * TargetAngle is a Condition that evaluates to true when a given angle is reached
+ */
 
 class TargetAngle : public Condition {
   int _target = 0;

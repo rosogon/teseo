@@ -11,7 +11,7 @@
 
 #else
 
-#include <arduinomock.h>
+#include "arduinomock.h"
 
 #endif
 

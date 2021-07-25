@@ -5,6 +5,10 @@ template <typename ... Args> static void _log(const char *format, Args... args) 
   tlog("DRI - ", format, args...);
 }
 
+/*
+ * Go 
+ */
+
 Go::Go(Driver &driver, int vel) {
   this->_vel = vel;
   this->_driver = &driver;  // for some reason, if _driver is a reference, this crashes
@@ -18,11 +22,16 @@ void Go::start() {
 
 void Go::stop() {
   _driver->stop();
+  _started = false;
 }
 
 bool Go::isStarted() {
   return _started;
 }
+
+/*
+ * Move
+ */
 
 Move::Move(Driver &driver, int vel, action_T action, side_T side, int delta) {
   _driver = &driver;
@@ -40,11 +49,16 @@ void Move::start() {
 
 void Move::stop() {
   _driver->stop();
+  _started = false;
 }
 
 bool Move::isStarted() {
   return _started;
 }
+
+/*
+ * MeasureWall
+ */
 
 MeasureWall::MeasureWall(Sensors &sensors) {
   _sensors = &sensors;
@@ -57,6 +71,10 @@ void MeasureWall::start() {
 void MeasureWall::loop() {
   _sensors->loop(ULTRASONIC);
 }
+
+/*
+ * Elapsed
+ */
 
 Elapsed::Elapsed(unsigned duration) {
   _duration = duration;
@@ -74,6 +92,10 @@ bool Elapsed::eval() {
   }
   return done;
 }
+
+/*
+ * NoWall
+ */
 
 #define MAX_WALL 40
 
@@ -98,6 +120,10 @@ bool NoWall::eval() {
   return _sensors->getDistance()[SIDE2DISTANCE(_sideToFollow)] > MAX_WALL;
 }
 
+/*
+ * FollowAngle
+ */
+
 FollowAngle::FollowAngle(Driver &driver, Sensors &sensors, int targetAngle) {
   _driver = &driver;
   _sensors = &sensors;
@@ -119,7 +145,6 @@ void FollowAngle::start() {
   _correcting = false;
 }
 
-
 void FollowAngle::loop() {
   _sensors->loop(COMPASS);
   
@@ -135,6 +160,21 @@ void FollowAngle::loop() {
     _correcting = false;
   }
 }
+
+int FollowAngle::calcDrift(double curAngle, int targetAngle) {
+  int drift = int(curAngle) - targetAngle;
+
+  if (drift > 180) {
+    drift = calcDrift(curAngle, targetAngle + 360);
+  } else if (drift < -180) {
+    drift = calcDrift(curAngle + 360, targetAngle);
+  }
+  return drift;
+}
+
+/*
+ * FollowWall
+ */
 
 FollowWall::FollowWall(Driver &driver, Sensors &sensors, side_T sideToFollow) {
   _driver = &driver;
@@ -164,16 +204,9 @@ void FollowWall::loop() {
   /* TODO */
 }
 
-int FollowAngle::calcDrift(double curAngle, int targetAngle) {
-  int drift = int(curAngle) - targetAngle;
-
-  if (drift > 180) {
-    drift = calcDrift(curAngle, targetAngle + 360);
-  } else if (drift < -180) {
-    drift = calcDrift(curAngle + 360, targetAngle);
-  }
-  return drift;
-}
+/*
+ * TargetAngle
+ */
 
 TargetAngle::TargetAngle(Sensors &sensors, int shift) {
   _sensors = &sensors;

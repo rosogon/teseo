@@ -21,7 +21,7 @@ private:
 public:
   UltrasonicSensor(uint8_t port, uint16_t maxCm = MAX_CM);
   void setPins(uint8_t triggerPin, uint8_t echoPin);
-  int distanceCm();
+  virtual int distanceCm();
   void trigger();
   void trigger1();
   bool trigger2();

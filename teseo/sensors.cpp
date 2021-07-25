@@ -40,7 +40,7 @@ void Sensors::loop(byte sensors) {
     char buf[100] = "";
     char *ptr = buf;
     for (size_t i = 0; i < usSet->size(); i++) {
-      int size = snprintf(ptr, 100 - strlen(buf), "[%d]=%d ", i, distance[i]);
+      int size = snprintf(ptr, 100 - strlen(buf), "[%lu]=%i ", i, distance[i]);
       ptr += size;
     }
     _log("%s", buf);
