@@ -5,8 +5,8 @@
 
 #include <stdarg.h>
 
-template <typename ... Args> static void _log(const char *format, Args... args) {
-  tlog("SEN - ", format, args...);
+static void _log(const char *format, ...) {
+    LOG_VA("SEN - ", format);
 }
 
 Sensors::Sensors(MeCompass *compass, int delayCompass, 

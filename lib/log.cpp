@@ -12,7 +12,7 @@ void setConsole(Print &newConsole) {
   console = &newConsole;
 }
 
-void tlog(const char *prefix, const char *format, ...) {
+void vtlog(const char *prefix, const char *format, va_list va) {
 #ifndef DISABLE_LOG
   char buf[MAXLINE];
 
@@ -21,11 +21,17 @@ void tlog(const char *prefix, const char *format, ...) {
   if (prefix && *prefix) {
     console->print(prefix);
   }
-  //snprintf(buf, MAXLINE, format, args...);
+  vsnprintf(buf, MAXLINE, format, va);
+  console->println(buf);
+#endif
+}
+
+void tlog(const char *prefix, const char *format, ...) {
+#ifndef DISABLE_LOG
+
   va_list va;
   va_start(va, format);
-  vsnprintf(buf, MAXLINE, format, va);
+  vtlog(prefix, format, va);
   va_end(va);
-  console->println(buf);
 #endif
 }

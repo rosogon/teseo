@@ -52,4 +52,18 @@ unittest(test_log)
     assertEqual("0 - main - value=3\r\n", console.buffer());
 }
 
+static void _log(const char *format, ...) {
+    LOG_VA("main - ", format);
+}
+
+unittest(test_vtlog)
+{
+    TestConsole console;
+    setConsole(console);
+
+    int val = 3;
+    _log("value=%d", val);
+    assertEqual("0 - main - value=3\r\n", console.buffer());
+}
+
 unittest_main()

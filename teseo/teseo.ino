@@ -13,10 +13,9 @@
 
 const char *mainstr = "MAIN - ";
 
-// Function below gives a compilation error (??!)
-//template <typename ... Args> static void _log(const char *format, Args... args) {
-//  tlog("MAI - ", format, args...);
-//}
+static void _log(const char *format, ...) {
+    LOG_VA("MAIN - ", format);
+}
 
 MeCompass compass(PORT_4);
 UltrasonicSensor usR(PORT_3, MAX_CM);

@@ -1,8 +1,8 @@
 #include "actions.h"
 #include <log.h>
 
-template <typename ... Args> static void _log(const char *format, Args... args) {
-  tlog("DRI - ", format, args...);
+static void _log(const char *format, ...) {
+    LOG_VA("ACT - ", format);
 }
 
 /*

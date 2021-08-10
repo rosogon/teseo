@@ -1,8 +1,8 @@
 #include "driver.h"
 #include <log.h>
 
-template <typename ... Args> static void _log(const char *format, Args... args) {
-  tlog("DRI - ", format, args...);
+static void _log(const char *format, ...) {
+    LOG_VA("DRI - ", format);
 }
 
 Driver::Driver(MeDCMotor *left, MeDCMotor *right, Sensors *sensors) {
