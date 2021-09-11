@@ -131,6 +131,9 @@ int *UltrasonicSet::distanceCm() {
 
 int *UltrasonicSet::distanceSerial() {
   for (int i = 0; i < _n; i++) {
+    if (_set[i] == nullptr) {
+      continue;
+    }
     _distance[i] = _set[i]->distanceCm();
   }
   return _distance;

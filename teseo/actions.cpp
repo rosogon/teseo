@@ -176,19 +176,23 @@ int FollowAngle::calcDrift(double curAngle, int targetAngle) {
  * FollowWall
  */
 
-FollowWall::FollowWall(Driver &driver, Sensors &sensors, side_T sideToFollow) {
+FollowWall::FollowWall(Driver &driver, Sensors &sensors, side_T sideToFollow, 
+    double kp, double ki, double kd) {
   _driver = &driver;
   _sensors = &sensors;
   _sideToFollow = sideToFollow;
+  this->kp = kp;
+  this->ki = ki;
+  this->kd = kd;
 }
 
 void FollowWall::start() {
-  side_T sides[] = { LEFT, RIGHT };
-  
+    
   if (_sideToFollow == NONE) {
     _sensors->loop(ULTRASONIC);
     _target = MAX_CM;
 
+    side_T sides[] = { LEFT, RIGHT };
     for (int i = 0; i < 2; i++) {
       side_T side = sides[i];
       int d = _sensors->getDistance()[SIDE2DISTANCE(side)];
@@ -197,11 +201,60 @@ void FollowWall::start() {
         _sideToFollow = side;
       }
     }
+  } else {
+    _sensors->loop(ULTRASONIC);
+    int pos = SIDE2DISTANCE(_sideToFollow);
+    _target = _sensors->getDistance()[pos];
   }
+  d0 = _target;
+  t0 = millis();
+  e0 = 0;
+  sE = 0;
 }
 
 void FollowWall::loop() {
-  /* TODO */
+  _sensors->loop(ULTRASONIC);
+  int d = _sensors->getDistance()[SIDE2DISTANCE(_sideToFollow)];
+  unsigned long t = millis();
+  long int dT = t - t0;
+
+  /*
+   * If e > 0, we are closer to the wall
+   */
+
+  int e = _target - d;
+  double dE = (e - e0) * 1000.0 / (double)dT;
+  sE += e * dT / 1000.0;
+
+  double kp_e = kp * e;
+  double ki_sE = ki * sE;
+  double kd_dE = kd * dE;
+  _log("t0=%lu t=%lu", t0, t);
+  //_log("e=%d kp=%lf ki=%lf kd=%lf", e, kp, ki, kd);
+  //_log("kp*e=%lf ki*sE=%lf dE=%lf kd*dE=%lf dT=%ld", kp_e, ki_se, dE, kd_de, dT);
+  std::cerr 
+    << "kp*e=" << kp << "*" << e << "=" << kp_e 
+    << " ki*sE=" << ki << "*" << sE << "=" << ki_sE 
+    << " kd*de=" << kd << "*" << dE << "=" << kd_dE << std::endl;
+  std::cerr << "t0=" << t0 << " t=" << t << " dT=" << dT << std::endl;
+  int o = kp_e + ki_sE + kd_dE;
+  //int o = (kp * e) + (ki * sE) + (kd * dE);
+  e0 = e;
+  t0 = t;
+  d0 = d;
+  o0 = o;
+  int speed = 255 - o;  // this should be orig_speed
+  byte delta = 0;
+  side_T sideToTurn;
+
+  if (o > 0) {
+    delta = o;
+    sideToTurn = (side_T) -_sideToFollow;
+  } else {
+    delta = -o;
+    sideToTurn = _sideToFollow;
+  }
+  _driver->move2(speed - delta, FORWARD, sideToTurn, delta);
 }
 
 /*

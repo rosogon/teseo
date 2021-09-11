@@ -136,14 +136,26 @@ class FollowWall : public Loop {
   Sensors *_sensors;
   side_T _sideToFollow;
   int _target;
+  
+  int e0;
+  int sE;
+  int d0;
+  unsigned long t0;
+  int o0;
+  double kp = 2, ki = 0.1, kd = 20;
 
 public:
-  FollowWall(Driver &, Sensors &, side_T sideToFollow = NONE);
+  FollowWall(Driver &, Sensors &, side_T sideToFollow = NONE, 
+      double kp = 1, double ki = 0.1, double kd = 10);
   const char *name() {
     return "FolWal";
   }
   void start();
   void loop();
+
+  inline int getError() { return e0; }
+  inline int getOutput() { return o0; }
+  inline int getLastDistance() { return d0; }
 };
 
 /*
@@ -169,5 +181,6 @@ public:
   void start();
   bool eval();
 };
+
 
 #endif
